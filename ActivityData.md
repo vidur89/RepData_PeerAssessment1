@@ -110,7 +110,7 @@ activityData<-mutate(activityData, steps=as.numeric(steps))
 #### Processing the data to get the mean ,median and total steps taken in a day
 
 ```r
-groupedActivityData<-group_by(activityData, recordDate)
+groupedActivityData<- group_by(activityData, recordDate)
 summary<-summarize(groupedActivityData, meanSteps=mean(steps,na.rm = T), totalSteps=sum(steps,na.rm =T),
                    medianSteps=median(steps,na.rm=T))
 maximumSteps=max(summary$totalSteps)
@@ -154,17 +154,11 @@ Calculate and report the mean and median of the total number of steps taken per 
 
 ```r
 mean(summary$totalSteps)
-```
-
-```
-## [1] 9354.23
-```
-
-```r
 median(summary$totalSteps)
 ```
 
 ```
+## [1] 9354.23
 ## [1] 10395
 ```
 ---
@@ -261,12 +255,8 @@ Make a histogram of the total number of steps taken each day and Calculate and r
 
 ```r
 newGroupedActivityData<-group_by(newActivityData, recordDate)
-newSummary<-summarize(newGroupedActivityData, meanSteps=mean(assumedSteps,na.rm = T),
-                      totalSteps=sum(assumedSteps,na.rm = T), medianSteps=median(assumedSteps,na.rm=T))
-```
-
-```
-## Error in mean(assumedSteps, na.rm = T): object 'assumedSteps' not found
+newSummary<-summarize(newGroupedActivityData, meanSteps=mean(steps,na.rm = T), totalSteps=sum(steps,na.rm = T),
+                      medianSteps=median(steps,na.rm=T))
 ```
 
 #### A histogram of the Total number of steps per day.
@@ -305,17 +295,11 @@ print((newSummary$totalSteps))
 
 ```r
 mean(newSummary$totalSteps)
-```
-
-```
-## [1] 10766.19
-```
-
-```r
 median(newSummary$totalSteps)
 ```
 
 ```
+## [1] 10766.19
 ## [1] 10766.19
 ```
 The new mean value is exactly the same as the original, however, the median is very slightly different. This shows that imputing values based on means does not create a large impact in the results. Because these new values were put in based on the other steps values, the data isn't too different.
@@ -326,7 +310,7 @@ The new mean value is exactly the same as the original, however, the median is v
 ---
 
 ---
-Create a new factor variable in the dataset with two levels ??? ???weekday??? and ???weekend??? indicating whether a given date is a weekday or weekend day
+Create a new factor variable in the dataset with two levels ??? "weekday" and "weekend" indicating whether a given date is a weekday or weekend day
 ---
 
 #### Given below is the data table divided between weekdays and weekends:
@@ -336,15 +320,8 @@ weekdayData<-newActivityData[,weekday:= (weekdays(newActivityData$recordDate)=="
                                                weekdays(newActivityData$recordDate)=="Saturday") ]
 weekdayData<-mutate(weekdayData,weekday=as.factor(weekday))
 levels(weekdayData$weekday)<- c("weekday", "weekend")
-newK <- aggregate(weekdayData$assumedSteps, by= list(weekdayData$interval,weekdayData$weekday),
+newK <- aggregate(weekdayData$steps, by= list(weekdayData$interval,weekdayData$weekday),
                   FUN = mean, na.rm=T)
-```
-
-```
-## Error in aggregate.data.frame(as.data.frame(x), ...): no rows to aggregate
-```
-
-```r
 colnames(newK) <- c("interval","day_of_week", "steps")
 ```
 
